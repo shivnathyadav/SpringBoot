@@ -18,6 +18,12 @@
 			<sonar.organization>shivnathyadav</sonar.organization>
 			<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		    <java.version>11</java.version>
+
+			<sonar.coverage.jacoco.xmlReportPaths>
+				../supermarket/target/site/jacoco-aggregate/jacoco.xml
+			</sonar.coverage.jacoco.xmlReportPaths>
+
+
 	</properties>
 	<dependencies>
 		<dependency>
