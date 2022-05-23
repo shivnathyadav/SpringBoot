@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login page</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        form {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div style="border: 3px solid deepskyblue;background: aquamarine;display: inline-block;padding: 50px 50px 80px 80px;margin-top: 8%">
+    <div th:if="${param.user!=null}" style="color: green">
+        Registered new user successful
+    </div>
+    <div th:if="${param.logout!=null}" style="color: green">
+        Logged out successfully
+    </div>
+<h1>Login page</h1>
+<form th:action="@{/authenticateTheUser}" method="post">
+    <label for="username">Username</label>:
+    <input type="text" id="username" name="username" autofocus="autofocus" placeholder="Enter username"/> <br /><br/>
+    <label for="password">Password</label>:&nbsp;
+    <input type="password" id="password" name="password" placeholder="Enter password"/> <br /><br/>
+    <input type="submit" value="Log in" />
+</form>
+    <p>Are you a new user? <a th:href="@{/registerPage}" >register</a></p>
+    <p>Have you selected a role before login? <a th:href="role" >role</a></p>
+    <div th:if="${param.error}" style="color: red">
+        Invalid username or password.<br/>
+                (or)
+        Have you forgot to select your role.
+    </div>
+</div>
+</body>
+</html>

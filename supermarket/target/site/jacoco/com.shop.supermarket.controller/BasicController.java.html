@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BasicController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">supermarket</a> &gt; <a href="index.source.html" class="el_package">com.shop.supermarket.controller</a> &gt; <span class="el_source">BasicController.java</span></div><h1>BasicController.java</h1><pre class="source lang-java linenums">package com.shop.supermarket.controller;
+
+
+import com.shop.supermarket.converter.UsersConverter;
+import com.shop.supermarket.dto.RolesDTO;
+import com.shop.supermarket.dto.UsersDTO;
+import com.shop.supermarket.entity.Roles;
+import com.shop.supermarket.entity.Users;
+import com.shop.supermarket.service.RolesService;
+import com.shop.supermarket.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+
+import javax.validation.Valid;
+import java.security.Principal;
+
+@Controller
+<span class="fc" id="L22">public class BasicController {</span>
+    @Autowired
+    private UsersService usersService;
+
+    @Autowired
+    private RolesService rolesService;
+
+    @Autowired
+    private UsersConverter usersConverter;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @GetMapping(&quot;/loginPage&quot;)
+    public String login()
+    {
+<span class="fc" id="L38">        return &quot;login-page&quot;;</span>
+    }
+
+    @GetMapping(&quot;/successHandler&quot;)
+    public String successHandler(Principal loggedUser, Model theModel)
+    {
+<span class="nc" id="L44">        theModel.addAttribute(&quot;loggedUser&quot;,loggedUser.getName());</span>
+<span class="nc" id="L45">        return &quot;home&quot;;</span>
+    }
+
+    @GetMapping(&quot;/access-denied&quot;)
+    public String failHandler()
+    {
+<span class="fc" id="L51">        return &quot;denied&quot;;</span>
+    }
+
+    @GetMapping(&quot;/registerPage&quot;)
+    public String registerPage()
+    {
+<span class="fc" id="L57">        return &quot;register&quot;;</span>
+    }
+
+    @PostMapping(&quot;/saveNewUser&quot;)
+    public String registerPage(@Valid @ModelAttribute(&quot;user&quot;) UsersDTO user, Model model)
+    {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (usersService.findByUsername(user.getUsername())!=null)</span>
+        {
+<span class="nc" id="L65">            return &quot;duplicate-user&quot;;</span>
+        }
+<span class="nc" id="L67">        user.setEnabled((short) 1);</span>
+<span class="nc" id="L68">        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());</span>
+<span class="nc" id="L69">        user.setPassword(encodedPassword);</span>
+<span class="nc" id="L70">        usersService.saveUser(usersConverter.dtoToEntity(user));</span>
+<span class="nc" id="L71">        model.addAttribute(&quot;finalUser&quot;,user);</span>
+<span class="nc" id="L72">        return &quot;redirect:/loginPage?user=True&quot;;</span>
+    }
+
+    @GetMapping(&quot;/role&quot;)
+    public String role()
+    {
+<span class="fc" id="L78">        return &quot;role-page&quot;;</span>
+    }
+
+    @PostMapping(&quot;/saveRole&quot;)
+    public String saveRole(@RequestParam(&quot;authority&quot;) RolesDTO role, @RequestParam(&quot;username&quot;) String username, Model model, Principal loggedUser)
+    {
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if(!usersService.findByUsername(username).getRoles().isEmpty())</span>
+        {
+<span class="nc" id="L86">            return &quot;prompt-page&quot;;</span>
+        }
+<span class="nc" id="L88">        Users tempUser = usersService.findByUsername(username);</span>
+<span class="nc" id="L89">        Roles tempRole = rolesService.getRolesById(role.getAuthority());</span>
+<span class="nc" id="L90">        tempUser.addRole(tempRole);</span>
+<span class="nc" id="L91">        tempRole.addUser(tempUser);</span>
+<span class="nc" id="L92">        usersService.saveUser(tempUser);</span>
+<span class="nc" id="L93">        return &quot;redirect:/loginPage&quot;;</span>
+    }
+
+    @PostMapping(&quot;/deleteUser&quot;)
+    public String deleteUser(Principal loggedUser)
+    {
+<span class="nc" id="L99">        usersService.deleteUser(usersService.findByUsername(loggedUser.getName()));</span>
+<span class="nc" id="L100">        return &quot;redirect:/loginPage&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

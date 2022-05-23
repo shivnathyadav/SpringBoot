@@ -1,0 +1,7 @@
+com/shop/supermarket/service/RolesServiceImplTest.class
+com/shop/supermarket/service/ItemsServiceImplTest.class
+com/shop/supermarket/service/UsersServiceImplTest.class
+com/shop/supermarket/BasicControllerTest.class
+com/shop/supermarket/UserDataControllerTest.class
+com/shop/supermarket/SupermarketApplicationTests.class
+com/shop/supermarket/StaffDataControllerTest.class

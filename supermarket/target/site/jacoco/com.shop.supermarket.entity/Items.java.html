@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Items.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">supermarket</a> &gt; <a href="index.source.html" class="el_package">com.shop.supermarket.entity</a> &gt; <span class="el_source">Items.java</span></div><h1>Items.java</h1><pre class="source lang-java linenums">package com.shop.supermarket.entity;
+
+import lombok.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Entity
+@Table(name = &quot;items&quot;)
+@Getter
+<span class="nc" id="L14">@Setter</span>
+<span class="fc" id="L15">@NoArgsConstructor</span>
+public class Items {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;item_id&quot;)
+<span class="fc" id="L21">    private int itemId;</span>
+
+    @NotNull(message = &quot;only contains string&quot;)
+    @Size(min=1)
+    @Column(name = &quot;item_name&quot;)
+<span class="fc" id="L26">    private String itemName;</span>
+
+    @Column(name = &quot;cost&quot;)
+<span class="fc" id="L29">    private int cost;</span>
+
+    @Column(name = &quot;company&quot;)
+<span class="fc" id="L32">    private String company;</span>
+
+
+    @ManyToMany(fetch = FetchType.LAZY,
+    cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(
+            name = &quot;orders&quot;,
+            joinColumns = @JoinColumn(name = &quot;item_id&quot;),
+            inverseJoinColumns = @JoinColumn(name = &quot;username&quot;)
+    )
+    @ToString.Exclude
+<span class="nc" id="L43">    private List&lt;Users&gt; users;</span>
+
+<span class="nc" id="L45">    public Items(String itemName, int cost, String company) {</span>
+<span class="nc" id="L46">        this.itemName = itemName;</span>
+<span class="nc" id="L47">        this.cost = cost;</span>
+<span class="nc" id="L48">        this.company = company;</span>
+<span class="nc" id="L49">    }</span>
+
+<span class="fc" id="L51">    public Items(int itemId, String itemName, int cost, String company) {</span>
+<span class="fc" id="L52">        this.itemId = itemId;</span>
+<span class="fc" id="L53">        this.itemName = itemName;</span>
+<span class="fc" id="L54">        this.cost = cost;</span>
+<span class="fc" id="L55">        this.company = company;</span>
+<span class="fc" id="L56">    }</span>
+
+<span class="nc" id="L58">    public Items(String itemName) {</span>
+<span class="nc" id="L59">    }</span>
+
+    public void addUser(Users theUser)
+    {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (users==null)</span>
+        {
+<span class="nc" id="L65">            users=new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L67">        users.add(theUser);</span>
+<span class="nc" id="L68">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

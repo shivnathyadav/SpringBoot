@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Users.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">supermarket</a> &gt; <a href="index.source.html" class="el_package">com.shop.supermarket.entity</a> &gt; <span class="el_source">Users.java</span></div><h1>Users.java</h1><pre class="source lang-java linenums">package com.shop.supermarket.entity;
+
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = &quot;users&quot;)
+@Getter
+<span class="pc" id="L15">@Setter</span>
+<span class="fc" id="L16">@NoArgsConstructor</span>
+public class Users {
+
+    @Column(name = &quot;id&quot;)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L21">    private int id;</span>
+
+    @Id
+    @Column(name = &quot;username&quot;)
+<span class="fc" id="L25">    private String username;</span>
+
+    @Column(name = &quot;password&quot;)
+<span class="fc" id="L28">    private String password;</span>
+
+
+    @Column(name = &quot;email&quot;)
+<span class="fc" id="L32">    private String email;</span>
+
+    @Column(name = &quot;phone_number&quot;)
+<span class="fc" id="L35">    private String phoneNumber;</span>
+
+    @Column(name = &quot;address&quot;)
+<span class="fc" id="L38">    private String address;</span>
+
+
+    @Column(name = &quot;enabled&quot;)
+<span class="fc" id="L42">    private short enabled;</span>
+
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(
+            name = &quot;orders&quot;,
+            joinColumns = @JoinColumn(name = &quot;username&quot;),
+            inverseJoinColumns = @JoinColumn(name = &quot;item_id&quot;)
+    )
+<span class="nc" id="L52">    private List&lt;Items&gt; items;</span>
+
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinTable(
+            name = &quot;authorities&quot;,
+            joinColumns = @JoinColumn(name = &quot;username&quot;),
+            inverseJoinColumns = @JoinColumn(name = &quot;authority&quot;)
+    )
+<span class="fc" id="L62">    private List&lt;Roles&gt; roles;</span>
+
+    public void addRole(Roles theRole)
+    {
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if(roles==null)</span>
+        {
+<span class="fc" id="L68">            roles=new ArrayList&lt;&gt;();</span>
+        }
+<span class="fc" id="L70">        roles.add(theRole);</span>
+<span class="fc" id="L71">    }</span>
+
+    public void addItem(Items theItem)
+    {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if(items==null)</span>
+        {
+<span class="nc" id="L77">            items=new ArrayList&lt;&gt;();</span>
+        }
+<span class="nc" id="L79">        items.add(theItem);</span>
+<span class="nc" id="L80">    }</span>
+
+
+<span class="fc" id="L83">    public Users(String username, String password, String email, String phoneNumber, String address, short enabled) {</span>
+<span class="fc" id="L84">        this.username = username;</span>
+<span class="fc" id="L85">        this.password = password;</span>
+<span class="fc" id="L86">        this.email = email;</span>
+<span class="fc" id="L87">        this.phoneNumber = phoneNumber;</span>
+<span class="fc" id="L88">        this.address = address;</span>
+<span class="fc" id="L89">        this.enabled = enabled;</span>
+<span class="fc" id="L90">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

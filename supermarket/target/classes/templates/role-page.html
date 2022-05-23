@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Role Page</title>
+    <style>
+        .error
+        {
+            color: red;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</head>
+<body>
+<h2 style="display: block;margin:0px;background: deepskyblue;text-align: center">Select your role</h2>
+<br/>
+<form  th:action="@{/saveRole}" method="post">
+    <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
+
+        <table class="table table-dark">
+            <tbody>
+            <tr>
+                <td><label>Username<span style="color: red">*</span> : </label></td>
+                <td><input type="text" required name="username" id="username" placeholder="Enter registered username"/></td>
+            </tr>
+
+                <td><label>Role<span style="color: red">*</span> :</label></td>
+                <td>
+                    <input required type="radio" id="user_authority" name="authority" value="ROLE_USER" placeholder="Enter your username">
+                    <label for="user_authority">USER</label><br>
+<!--                    <input required type="radio" id="staff_authority" name="authority" value="ROLE_STAFF">-->
+<!--                    <label for="staff_authority">STAFF</label><br>-->
+                </td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="submit" /></td>
+                <td></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/loginPage}" style="color: white;text-decoration: none;">Back to Login</a></button>
+</body>
+</body>
+</html>

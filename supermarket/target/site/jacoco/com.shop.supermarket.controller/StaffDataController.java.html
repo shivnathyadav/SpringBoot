@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StaffDataController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">supermarket</a> &gt; <a href="index.source.html" class="el_package">com.shop.supermarket.controller</a> &gt; <span class="el_source">StaffDataController.java</span></div><h1>StaffDataController.java</h1><pre class="source lang-java linenums">package com.shop.supermarket.controller;
+
+
+import com.shop.supermarket.converter.ItemsConverter;
+import com.shop.supermarket.converter.UsersConverter;
+import com.shop.supermarket.dto.ItemsDTO;
+import com.shop.supermarket.dto.UsersDTO;
+import com.shop.supermarket.entity.Items;
+import com.shop.supermarket.entity.Users;
+import com.shop.supermarket.service.ItemsService;
+import com.shop.supermarket.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+import java.security.Principal;
+
+@Controller
+@RequestMapping(&quot;/staff&quot;)
+<span class="fc" id="L25">public class StaffDataController {</span>
+
+    @Autowired
+    private UsersService usersServiceObject;
+
+    private ItemsService itemsServiceObject;
+
+    @Autowired
+    public void setItemsServiceObject(ItemsService itemsServiceObject)
+    {
+<span class="fc" id="L35">        this.itemsServiceObject=itemsServiceObject;</span>
+<span class="fc" id="L36">    }</span>
+
+    private ItemsConverter itemsConverterObject;
+
+    @Autowired
+    public void setItemsConverterObject(ItemsConverter itemsConverterObject)
+    {
+<span class="fc" id="L43">        this.itemsConverterObject=itemsConverterObject;</span>
+<span class="fc" id="L44">    }</span>
+
+    @Autowired
+    private UsersConverter usersConverterObject;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoderObject;
+
+    static final String SUCCESS_HANDLER = &quot;redirect:/successHandler&quot;;
+
+    @GetMapping(&quot;/stockList&quot;)
+    public String stockList(Model theModel)
+    {
+<span class="fc" id="L57">        theModel.addAttribute(&quot;allItems&quot;, itemsConverterObject.entityToDto(itemsServiceObject.getAllItemsList()));</span>
+<span class="fc" id="L58">        return &quot;stock-list&quot;;</span>
+    }
+
+
+    @PostMapping(&quot;/deleteItem&quot;)
+    public ModelAndView deleteItem(@RequestParam int id)
+    {
+<span class="fc" id="L65">        itemsServiceObject.deleteItemById(id);</span>
+<span class="fc" id="L66">        return new ModelAndView(&quot;redirect:/staff/stockList&quot;);</span>
+    }
+
+
+
+    @GetMapping(&quot;/updateStaffPage&quot;)
+    public String updatePage(Model model,Principal loggedUser)
+    {
+<span class="nc" id="L74">        UsersDTO tempUser = usersConverterObject.entityToDto(usersServiceObject.findByUsername(loggedUser.getName()));</span>
+<span class="nc" id="L75">        model.addAttribute(&quot;user&quot;,tempUser);</span>
+<span class="nc" id="L76">        return &quot;update-staff-page&quot;;</span>
+    }
+
+
+    @PostMapping(&quot;/saveUser&quot;)
+    public String saveUser(@Valid @ModelAttribute(&quot;user&quot;) UsersDTO user, BindingResult bindingResult, Model model,Principal loggedUser)
+    {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if(bindingResult.hasErrors())</span>
+        {
+<span class="nc" id="L85">            model.addAttribute(&quot;error&quot;,bindingResult.getFieldError(&quot;id&quot;));</span>
+<span class="nc" id="L86">            model.addAttribute(&quot;user&quot;,user);</span>
+<span class="nc" id="L87">            return &quot;update-staff-page&quot;;</span>
+        }
+<span class="nc" id="L89">        Users tempUser = usersConverterObject.dtoToEntity(user);</span>
+<span class="nc" id="L90">        String encodedPassword = bCryptPasswordEncoderObject.encode(tempUser.getPassword());</span>
+<span class="nc" id="L91">        usersServiceObject.updateUser(loggedUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());</span>
+<span class="nc" id="L92">        return SUCCESS_HANDLER;</span>
+    }
+
+
+    @GetMapping(&quot;/addItem&quot;)
+    public String addNewItem()
+    {
+<span class="fc" id="L99">        return &quot;item-form&quot;;</span>
+    }
+
+    @PostMapping(&quot;/saveItem&quot;)
+    public String saveNewItem(@Valid @ModelAttribute(&quot;item&quot;) ItemsDTO itemsDTO)
+    {
+<span class="nc" id="L105">        itemsServiceObject.saveItem(itemsConverterObject.dtoToEntity(itemsDTO));</span>
+<span class="nc" id="L106">        return SUCCESS_HANDLER;</span>
+    }
+
+
+    @PostMapping(&quot;/updateItem&quot;)
+    public String updateItem(@Valid @RequestParam(&quot;itemId&quot;) int itemId, Model model)
+    {
+<span class="nc" id="L113">        model.addAttribute(&quot;item&quot;,itemsConverterObject.entityToDto(itemsServiceObject.getItemById(itemId)));</span>
+<span class="nc" id="L114">        return &quot;item-update&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

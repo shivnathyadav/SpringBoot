@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Page</title>
+    <style>
+        .error
+        {
+            color: red;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</head>
+<body>
+<h2 style="display: block;margin:0px;background: deepskyblue;text-align: center">Registration Page</h2>
+<br/>
+<form th:object="${user}" th:action="@{/saveNewUser}" method="post">
+    <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
+<!--        <div class="alert alert-danger error" th:if="${#fields.hasErrors('*')}">-->
+<!--            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>-->
+<!--        </div>-->
+    <table class="table table-dark">
+        <tbody>
+        <tr>
+            <td><label>Username<span style="color: red">*</span> : </label></td>
+            <td><input type="text"  required name="username" id="username" placeholder="Enter username"/></td>
+        </tr>
+        <tr>
+            <td><label>User password<span style="color: red">*</span> : </label></td>
+            <td><input type="password"  minlength="4" name="password" required id="password" placeholder="Enter password"/></td>
+        </tr>
+        <tr>
+            <td><label>User email<span style="color: red">*</span> :</label></td>
+            <td><input type="email" required name="email" id="email" placeholder="Enter email id"></td>
+        </tr>
+        <tr>
+            <td><label>User phoneNumber :</label></td>
+            <td><input type="text" name="phoneNumber" id="phoneNumber" placeholder="Enter phone number"></td>
+        </tr>
+        <tr>
+            <td><label>User address :</label></td>
+            <td><input type="text" name="address" id="address" placeholder="Enter address"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="submit" /></td>
+            <td></td>
+        </tr>
+
+        </tbody>
+    </table>
+    </div>
+</form>
+
+<button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/loginPage}" style="color: white;text-decoration: none;">Back to Login</a></button>
+</body>
+</html>
