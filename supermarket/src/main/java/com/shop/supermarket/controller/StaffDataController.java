@@ -89,6 +89,7 @@ public class StaffDataController {
         Users tempUser = usersConverterObject.dtoToEntity(user);
         String encodedPassword = bCryptPasswordEncoderObject.encode(tempUser.getPassword());
         usersServiceObject.updateUser(loggedUser.getName(),encodedPassword,tempUser.getEmail(),tempUser.getPhoneNumber(),tempUser.getAddress());
+
         return SUCCESS_HANDLER;
     }
 

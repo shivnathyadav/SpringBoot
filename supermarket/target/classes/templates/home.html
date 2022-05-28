@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml http://www.thymeleaf.org"
+      xmlns:grid-template-columns="http://www.w3.org/1999/xhtml" xmlns:display="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
@@ -7,57 +9,125 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 </head>
-<body>
-<div sec:authorize="isAuthenticated()">
+<body style="background-color:powderblue">
+<div sec:authorize="isAuthenticated()" >
 
 
 <!-- div only for user role -->
-<div sec:authorize="hasRole('ROLE_USER')">
+<div sec:authorize="hasRole('ROLE_USER')" >
     <h2 style="display: block;margin:0px;background: deepskyblue;text-align: center;padding: 2px;">Home Page</h2>
     <br/>
     <p style=" margin-top: 3px;
      margin-left: 2px;
      position:absolute;
      top:0;
-     left:0;">Logged user is : <span th:text = "${loggedUser}"></span></p>
+     left:0;">Logged user : <span th:text = "${loggedUser}"></span></p>
     <br/>
-    <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
-        <table class="table table-dark">
+    <div style="   display: grid;
+     grid-template-columns:auto auto;">
+    <div style="height: auto; ">
+        <table class="table table-dark" style="width:100px;border-color:powderblue;">
             <thead>
-            <th scope="col">Operations</th>
+            <th scope="col" style="color:white;background-color:black;border-color:powderblue;"><h2>Operations</h2></th>
             </thead>
-            <tbody>
-            <tr scope="row"><td style="text-align: center"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/user/updatePage}" style="color: white;text-decoration: none;">update personal data</a></button></td></tr>
-            <tr scope="row"><td style="text-align: center"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/user/ordersList}" style="color: white;text-decoration: none;">display ordered items</a></button></td></tr>
-            <tr scope="row"><td style="text-align: center"><button type="button" class="btn btn-primary" style="margin: 2px"><a th:href="@{/user/order}" style="color: white;text-decoration: none;">order new item</a></button></td></tr>
+            <tbody style="background-color:powderblue;">
+            <tr scope="row" style=""><td style="text-align: left;border-color:powderblue;"><a th:href="@{/user/updatePage}" style="color: blue;background-color:powderblue;text-decoration: under line;">Personal data</a></td></tr>
+            <tr scope="row" style=""><td style="text-align: left;border-color:powderblue;"><a th:href="@{/user/ordersList}" style="color: blue;background-color:powderblue;text-decoration: under line;">Display ordered items</a></td></tr>
             </tbody>
         </table>
+
     </div>
+
+        <div style="width: 600px;height: auto;align-items:end">
+            <h2 style="display: block;margin:0px;background: deepskyblue;text-align: center">Items in Stock List</h2>
+            <br/>
+            <table class="table">
+                <thead class="thead-dark">
+                <th scope="col">Item Id</th>
+                <th scope="col">Item Name</th>
+                <th scope="col">Item Cost</th>
+                <th scope="col">Item Company</th>
+                </thead>
+                <tbody>
+                <tr th:each = "item: ${items}">
+                    <td th:text="${item.getItemId()}" scope="row"></td>
+                    <td th:text="${item.itemName}"></td>
+                    <td th:text="${item.cost}"></td>
+                    <td th:text="${item.company}"></td>
+                    <td>
+                        <form th:action="@{/user/orderItem}" method="post">
+                            <input type="text" hidden id="itemId" th:value="${item.getItemId()}" name="itemId">
+                            <input type="submit" value="Add to Cart"/>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+
+
+
+
 </div>
 
 <!-- div only for staff role -->
 
-<div sec:authorize="hasRole('ROLE_STAFF')">
+<div sec:authorize="hasRole('ROLE_STAFF')" >
     <h2 style="display: block;margin:0px;background: limegreen;text-align: center;padding: 2px">Home Page</h2>
     <br/>
     <p style=" margin-top: 1px;
      margin-left: 2px;
      position:absolute;
      top:0;
-     left:0;">Logged staff member is : <span th:text = "${loggedUser}"></span></p>
+     left:0;">Logged staff member: <span th:text = "${loggedUser}"></span></p>
     <br/>
-    <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto">
-        <table class="table table-dark">
+    <div style="   display: grid;
+     grid-template-columns:auto auto;">
+    <div style="height: auto;">
+        <table class="table table-dark" style="width:100px;border-color:powderblue;">
             <thead>
-                <th scope="col">Operations</th>
+                <th scope="col" style="color:white;background-color:black;border-color:powderblue;"><h2>Operations</h2></th>
             </thead>
-            <tbody>
-                <tr scope="row"><td style="text-align: center"><button type="button" class="btn btn-success" style="margin: 2px"><a th:href="@{/staff/updateStaffPage}" style="color: white;text-decoration: none;">update personal data</a></button></td></tr>
-                <tr scope="row"><td style="text-align: center"><button type="button" class="btn btn-success" style="margin: 2px"><a th:href="@{/staff/stockList}" style="color: white;text-decoration: none;">see stock list</a></button></td></tr>
-                <tr scope="row"><td style="text-align: center"><button type="button" class="btn btn-success" style="margin: 2px"><a th:href="@{/staff/addItem}" style="color: white;text-decoration: none;">add new item</a></button></td></tr>
+            <tbody style="background-color:powderblue;border-color:black;">
+                <tr scope="row"><td style="text-align: left;border-color:powderblue;"><a th:href="@{/staff/updateStaffPage}" style="color: blue;background-color:powderblue;text-decoration: under line;">Personal data</a></td></tr>
+                <tr scope="row"><td style="text-align: left;border-color:powderblue;"><a th:href="@{/staff/addItem}" style="color: blue;background-color:powderblue;text-decoration: under line;">Add new item</a></td></tr>
             </tbody>
         </table>
     </div>
+
+
+    <div style="width: 600px;height: auto;margin-left: auto;margin-right: auto;align-items:right">
+
+        <table class="table">
+            <thead class="thead-dark">
+            <th scope="col">Item Id</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Item Cost</th>
+            <th scope="col">Company</th>
+            <th scope="col">Delete Item</th>
+            <th scope="col">Update Item</th>
+            </thead>
+            <tbody>
+            <tr th:each = "item: ${allItems}">
+                <td th:text="${item.getItemId()}" scope="row"></td>
+                <td th:text="${item.getItemName()}"></td>
+                <td th:text="${item.getCost()}"></td>
+                <td th:text="${item.getCompany()}"></td>
+                <td><form th:action="@{/staff/deleteItem}" method="post">
+                    <input type="text" th:value="${item.getItemId()}" name="id" id="id" hidden>
+                    <input type="submit" value="delete item" th:onclick="return confirm('Are you sure, you want to delete this item!')"/>
+                </form></td>
+                <td><form th:action="@{/staff/updateItem}" method="post">
+                    <input type="text" th:value="${item.getItemId()}" name="itemId" id="itemId" hidden>
+                    <input type="submit" value="update item" th:onclick="return confirm('Are you sure, you want to update this item!')"/>
+                </form></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
 
 </div>
 
@@ -76,5 +146,9 @@
         <input class="btn btn-danger" type="submit" value="Delete Account" th:onclick="return confirm('Are you sure, you want to delete your account!')"/>
     </form>
 </div>
+
+
+
+
 </body>
 </html>

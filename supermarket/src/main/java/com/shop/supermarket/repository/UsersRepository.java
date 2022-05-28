@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
-@Transactional
+
 public interface UsersRepository extends JpaRepository<Users,String> {
     @Query("select user.items from Users user where user.username=:username")
     public List<Items> getOrdersList(@Param("username") String username);

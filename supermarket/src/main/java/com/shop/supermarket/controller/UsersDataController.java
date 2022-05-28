@@ -52,6 +52,7 @@ public class UsersDataController {
     public String order(Model theModel)
     {
         theModel.addAttribute("items",itemsConverter.entityToDto(itemsService.getAllItemsList()));
+
         return "order-item";
     }
 

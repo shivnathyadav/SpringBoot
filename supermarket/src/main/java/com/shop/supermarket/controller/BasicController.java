@@ -1,11 +1,13 @@
 package com.shop.supermarket.controller;
 
 
+import com.shop.supermarket.converter.ItemsConverter;
 import com.shop.supermarket.converter.UsersConverter;
 import com.shop.supermarket.dto.RolesDTO;
 import com.shop.supermarket.dto.UsersDTO;
 import com.shop.supermarket.entity.Roles;
 import com.shop.supermarket.entity.Users;
+import com.shop.supermarket.service.ItemsService;
 import com.shop.supermarket.service.RolesService;
 import com.shop.supermarket.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,12 @@ public class BasicController {
     private UsersService usersService;
 
     @Autowired
+    private ItemsService itemsService;
+
+    @Autowired
+    private ItemsConverter itemsConverter;
+
+    @Autowired
     private RolesService rolesService;
 
     @Autowired
@@ -31,6 +39,21 @@ public class BasicController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private ItemsService itemsServiceObject;
+
+    @Autowired
+    public void setItemsServiceObject(ItemsService itemsServiceObject)
+    {
+        this.itemsServiceObject=itemsServiceObject;
+    }
+
+    private ItemsConverter itemsConverterObject;
+
+    @Autowired
+    public void setItemsConverterObject(ItemsConverter itemsConverterObject)
+    {
+        this.itemsConverterObject=itemsConverterObject;
+    }
 
     @GetMapping("/loginPage")
     public String login()
@@ -42,6 +65,10 @@ public class BasicController {
     public String successHandler(Principal loggedUser, Model theModel)
     {
         theModel.addAttribute("loggedUser",loggedUser.getName());
+        theModel.addAttribute("items",itemsConverter.entityToDto(itemsService.getAllItemsList()));
+        theModel.addAttribute("allItems", itemsConverterObject.entityToDto(itemsServiceObject.getAllItemsList()));
+
+
         return "home";
     }
 
